@@ -1,0 +1,12 @@
+2026-03-03 12:56:01 [main] TRACE relationaldatabases.LogigingTest -
+				trace info-vey detailed info: you have entered the method division
+2026-03-03 12:56:01 [main] DEBUG relationaldatabases.LogigingTest -
+				test info: division method test
+2026-03-03 12:56:01 [main] INFO  relationaldatabases.LogigingTest -
+				main general info to show our app is running normally
+2026-03-03 12:56:01 [main] WARN  relationaldatabases.LogigingTest -
+				unexpected problems but not vital
+2026-03-03 12:56:01 [main] ERROR relationaldatabases.LogigingTest -
+				serious problem that should be resolved
+2026-03-03 12:56:01 [main] INFO  relationaldatabases.LogigingTest -
+				the user has passed a zero as a dividend
