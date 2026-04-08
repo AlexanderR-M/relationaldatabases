@@ -10,3 +10,21 @@
 				serious problem that should be resolved
 2026-03-03 12:56:01 [main] INFO  relationaldatabases.LogigingTest -
 				the user has passed a zero as a dividend
+2026-03-03 13:04:57 [main] TRACE relationaldatabases.LogigingTest -
+				trace info-vey detailed info: you have entered the method division
+2026-03-03 13:04:57 [main] DEBUG relationaldatabases.LogigingTest -
+				test info: division method test
+2026-03-03 13:04:57 [main] INFO  relationaldatabases.LogigingTest -
+				main general info to show our app is running normally
+2026-03-03 13:04:57 [main] WARN  relationaldatabases.LogigingTest -
+				unexpected problems but not vital
+2026-03-03 13:04:57 [main] ERROR relationaldatabases.LogigingTest -
+				serious problem that should be resolved
+2026-03-03 13:04:57 [main] INFO  relationaldatabases.LogigingTest -
+				the user has passed a zero as a dividend
+2026-03-04 11:29:22 [main] TRACE relationaldatabases.LogigingTest - trace info-vey detailed info: you have entered the method division
+2026-03-04 11:29:22 [main] DEBUG relationaldatabases.LogigingTest - test info: division method test
+2026-03-04 11:29:22 [main] INFO  relationaldatabases.LogigingTest - main general info to show our app is running normally
+2026-03-04 11:29:22 [main] WARN  relationaldatabases.LogigingTest - unexpected problems but not vital
+2026-03-04 11:29:22 [main] ERROR relationaldatabases.LogigingTest - serious problem that should be resolved
+2026-03-04 11:29:22 [main] INFO  relationaldatabases.LogigingTest - the user has passed a zero as a dividend
