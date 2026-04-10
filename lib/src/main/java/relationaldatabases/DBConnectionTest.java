@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 
 
@@ -16,144 +18,108 @@ public class DBConnectionTest {
 
 
 
-	private final static String postgresqlURL = "jdbc:postgresql://localhost:5432/postgres";
+    private final static String postgresqlURL = "jdbc:postgresql://localhost:5432/postgres";
 
-	// "jdbc:postgresql://192.168.1.170.5432/sample?ssl=true";
+    // "jdbc:postgresql://192.168.1.170.5432/sample?ssl=true";
 
-	private static String username = "postgres";
+    private static String username = "postgres";
 
-	private static String password = "Admin";
-
-
-
-	public static void main(String[] args) {
-
-		try {
-
-			Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
-
-			System.out.println("the address of the connection object is" + conn);
+    private static String password = "Admin";
 
 
 
-			createDatabase(conn);
+    public static void main(String[] args) {
 
-			String dropTableSQL = "drop table if exists users";
+        try {
 
-			PreparedStatement ps=
+            Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
+            System.out.println("the address of the connection object is" + conn);
 
-					conn.prepareStatement(dropTableSQL);
+            createDatabase(conn);
+            
+            String dropTableSQL = "drop table if exists users";
 
-			ps.executeUpdate();
+            PreparedStatement ps = conn.prepareStatement(dropTableSQL);
 
-			ps.close();
+            ps.executeUpdate();
 
-			// table creation sql
+            ps.close();
 
-			String createTableSQL = "create table if not exists users(" + "id integer not null,"
+            // table creation sql
 
-					+ "usenname VARCHAR(255), " + "psw VARCHAR(255)," + "isVIP boolean," + "balance numeric,"
+            String createTableSQL = "create table if not exists users(" + "id integer not null,"
 
-					+ "PRIMARY KEY (id)" + ")";
+                    + "usenname VARCHAR(255), " + "psw VARCHAR(255)," + "isVIP boolean," + "balance numeric,"
 
-			PreparedStatement ps1 = conn.prepareStatement(createTableSQL);
+                    + "PRIMARY KEY (id)" + ")";
 
-			ps1.executeUpdate();
+            PreparedStatement ps1 = conn.prepareStatement(createTableSQL);
 
-			ps1.close();
+            ps1.executeUpdate();
 
-			// insert sal
+            ps1.close();
 
-			String insertSQL = "insert into users(id,usenname,psw, isVIP, balance) values ('58','Adolfo',1243,true,234.4),('20','Manolo','123',false,234.3)";
-			PreparedStatement ps11 = conn.prepareStatement(insertSQL);
-			System.out.println(ps11.executeUpdate());
-			ps11.close();
+            // insert sal
 
-			
-			// select psw, isVIP from users where username = 'Manolo' ;
-			
-			selectByName(conn, "manolo");
+            String insertSQL = "insert into users(id,usenname,psw, isVIP, balance) values ('19','Pablo',1243,true,224.5),('20','Alex','121',false,234.9)";
+            PreparedStatement ps11 = conn.prepareStatement(insertSQL);
+            System.out.println(ps11.executeUpdate());
+            ps11.close();
+            // delete sal
 
-			
-			deLeteByName(ps, conn, "Alejandro");
-
-
-
-		} catch (SQLException e) {
-
-			// TODO Auto-generated catch block
-
-			e.printStackTrace();
-
-		}
+            selectByName(conn, "Pablo");
+            deleteByName( conn, "Jorge" );
 
 
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
 
-	}
+        }
+
+    }
 
 
 
-	private static void selectByName(Connection conn, String string) throws SQLException {
-		
-		
-		String selectSQL = "select * from users where usenname = 'Manolo";
-		PreparedStatement ps8 = conn.prepareStatement(selectSQL);
-		System.out.println(ps8.executeUpdate());
-		ps8.close();
-		
-		try (ResultSet rs = ps8.getResultSet();){
-			if (rs.next()) {
-				System.out.println(rs.getString("username"));
-				System.out.println(rs.getString("psw"));
-				System.out.println(rs.getBoolean(0));
-				
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
+    private static void selectByName(Connection conn, String name ) throws SQLException {
+
+        // TODO Auto-generated method stub
+        String selectSQL = "select * from users where usenname =" + name;
+        PreparedStatement ps3 = conn.prepareStatement(selectSQL);
+        System.out.println();
+        ResultSet rs = ps3.executeQuery();
 
 
 
-	private static void deLeteByName(PreparedStatement ps, Connection conn, String string) throws SQLException {
-		
-		String deleteSQL = "DELETE FROM users WHERE usenname = 'Alejandro'";
-
-		PreparedStatement ps2 = conn.prepareStatement(deleteSQL);
-
-		System.out.println(ps2.executeUpdate());
-
-		ps2.close();
-		
-	}
+    }
 
 
+    private static void deleteByName(Connection conn, String name) throws SQLException {
 
-	private static void createDatabase(Connection conn) {
+        // TODO Auto-generated method stub
+        String deleteSQL = "DELETE FROM users WHERE usenname = "+ name;
+        //select psw, isVIP from users where username = 'Manolo' ;
+        PreparedStatement ps2 = conn.prepareStatement(deleteSQL);
+        System.out.println(ps2.executeUpdate());
+        ps2.close();
 
-		// TODO Auto-generated method stub
+    }
 
-		try {
 
-			String dbCreationSQL = "CREATE DATABASE  happylearning";
 
-			PreparedStatement ps = conn.prepareStatement(dbCreationSQL);
+    private static void createDatabase(Connection conn) {
+        // TODO Auto-generated method stub
+        try {
+            String dbCreationSQL = "CREATE DATABASE  ";
+            PreparedStatement ps = conn.prepareStatement(dbCreationSQL);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
 
-			ps.executeUpdate();
+            // TODO: handle exception
 
-		} catch (Exception e) {
+        }
 
-			e.printStackTrace();
-
-			
-			// TODO: handle exception
-
-		}
-
-	}
+    }
 
 }
-
-
-
