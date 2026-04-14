@@ -4,6 +4,12 @@ import java.security.Identity;
 import java.util.List;
 
 import relationaldatabases.model.User;
+/**
+ * the inteerface that defines the functionalities to interact
+ * with the database
+ * @author alex
+ * 10 abr 2026
+ */
 
 public interface UserDao {
 	
