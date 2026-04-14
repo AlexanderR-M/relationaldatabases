@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.List;import javax.print.attribute.UnmodifiableSetException;
 
 import relationaldatabases.model.User;
 
@@ -21,13 +21,13 @@ public class UserDaoImpl implements UserDao{
 
     private final static String username = "postgres";
 
-    private final static String password = "Admin";
+    private final static String password = "admin";
 
 	@Override
 	public boolean insert(User user) {
 		//the ingredients that we need to do the task
 		//insert sql
-		String insertSQL = "insert into users(name, password, isVIP, balance)" + "values(?, ?, ?, ?)";
+		String insertSQL = "insert into users(name, password, balance, age, phonenumber, isActive, gender, description)" + "values(?, ?, ?, ?, ?, ?, ?, ? )";
 		/**
 		 * create an object of connecton to establish
 		 * a network connection with the database used in 
@@ -40,6 +40,13 @@ public class UserDaoImpl implements UserDao{
 				 */
 				PreparedStatement ps = conn.prepareStatement(insertSQL)) {
 			ps.setString(1, user.getName());
+			ps.setString(2, user.getPassword());
+			ps.setDouble(3,user.getBalance());
+			ps.setString(4, user.getAge());
+			ps.setInt(5, user.getPhonenumber());
+			ps.setBoolean(6, user.isActive());
+			ps.setString(7, user.getGender());
+			ps.setString(8, user.getDescription());
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
