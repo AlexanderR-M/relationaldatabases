@@ -18,6 +18,8 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
+    // Source: https://mvnrepository.com/artifact/org.postgresql/postgresql
+	implementation("org.postgresql:postgresql:42.7.3")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 

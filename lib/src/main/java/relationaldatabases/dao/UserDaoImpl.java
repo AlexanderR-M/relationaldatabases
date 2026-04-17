@@ -21,8 +21,23 @@ public class UserDaoImpl implements UserDao{
 
     private final static String username = "postgres";
 
-    private final static String password = "admin";
+    private final static String password = "Admin";
 
+    private static String dropTableSQL = "drop table if exists users";
+    private static final String createTableSQL = """
+    	    CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            balance DECIMAL(10,2) NOT NULL,
+            age VARCHAR(50),
+            phonenumber INTEGER,
+            isActive BOOLEAN DEFAULT true,
+            gender VARCHAR(20),
+            description TEXT
+        )
+        """;;
+    
 	@Override
 	public boolean insert(User user) {
 		//the ingredients that we need to do the task
