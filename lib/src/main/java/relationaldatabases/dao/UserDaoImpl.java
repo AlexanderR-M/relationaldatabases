@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao{
 
     private final static String username = "postgres";
 
-    private final static String password = "Admin";
+    private final static String password = "admin";
 
     private static String dropTableSQL = "drop table if exists users";
     private static final String createTableSQL = """
@@ -62,6 +62,7 @@ public class UserDaoImpl implements UserDao{
 			ps.setBoolean(6, user.isActive());
 			ps.setString(7, user.getGender());
 			ps.setString(8, user.getDescription());
+			ps.executeUpdate();
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -99,6 +100,32 @@ public class UserDaoImpl implements UserDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean createTable() {
+		String insertSQL = "insert into users(name, password, balance, age, phonenumber, isActive, gender, description)" + "values(?, ?, ?, ?, ?, ?, ?, ? )";
+		/**
+		 * create an object of connecton to establish
+		 * a network connection with the database used in 
+		 * our program
+		 */
+		try (Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
+				/**
+				 * crete an object with prepareStatement which 
+				 * allows us to prepare, send execute sqls
+				 */
+				PreparedStatement ps = conn.prepareStatement(createTableSQL)) {
+				ps.executeUpdate();
+			
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
 	
 
 }

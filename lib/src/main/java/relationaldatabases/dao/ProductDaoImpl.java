@@ -19,7 +19,7 @@ public class ProductDaoImpl implements ProductDao {
     // "jdbc:postgresql://192.168.1.170.5432/sample?ssl=true";
 
     private final static String username = "postgres";
-    private final static String password = "Admin";
+    private final static String password = "admin";
 
     private static String dropTableSQL = "drop table if exists products";
     private static final String createTableSQL = """

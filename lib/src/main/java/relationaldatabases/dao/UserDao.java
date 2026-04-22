@@ -12,7 +12,7 @@ import relationaldatabases.model.User;
  */
 
 public interface UserDao {
-	
+	public boolean createTable();
 	
 	/**
 	 * insert an user object to database
