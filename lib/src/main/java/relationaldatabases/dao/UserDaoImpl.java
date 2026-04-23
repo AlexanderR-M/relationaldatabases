@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;import javax.print.attribute.UnmodifiableSetException;
 
 import relationaldatabases.model.User;
+import relationaldbs.util.DBHelper;
 
 /**
  * 
@@ -15,13 +16,7 @@ import relationaldatabases.model.User;
  */
 public class UserDaoImpl implements UserDao{
 	
-	private final static String postgresqlURL = "jdbc:postgresql://localhost:5432/postgres";
-
-    // "jdbc:postgresql://192.168.1.170.5432/sample?ssl=true";
-
-    private final static String username = "postgres";
-
-    private final static String password = "admin";
+	
 
     private static String dropTableSQL = "drop table if exists users";
     private static final String createTableSQL = """
@@ -48,7 +43,7 @@ public class UserDaoImpl implements UserDao{
 		 * a network connection with the database used in 
 		 * our program
 		 */
-		try (Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
+		try (Connection conn = DBHelper.getConnection();
 				/**
 				 * crete an object with prepareStatement which 
 				 * allows us to prepare, send execute sqls
