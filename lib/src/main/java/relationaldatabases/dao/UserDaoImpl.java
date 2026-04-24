@@ -73,7 +73,7 @@ public class UserDaoImpl implements UserDao{
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM users WHERE id = ?");
 			
 			ps.setLong(1, id);
-			ps.executeUpdate();
+			ps.executeUpdate(createTableSQL);
 			
 			
 			
@@ -109,28 +109,34 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	@Override
+
 	public boolean createTable() {
-		String insertSQL = "insert into users(name, password, balance, age, phonenumber, isActive, gender, description)" + "values(?, ?, ?, ?, ?, ?, ?, ? )";
-		/**
-		 * create an object of connecton to establish
-		 * a network connection with the database used in 
-		 * our program
-		 */
-		try (Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
-				/**
-				 * crete an object with prepareStatement which 
-				 * allows us to prepare, send execute sqls
-				 */
-				PreparedStatement ps = conn.prepareStatement(createTableSQL)) {
-				ps.executeUpdate();
-			
-		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+	    String createTableSQL = """
+	        CREATE TABLE IF NOT EXISTS users (
+	            id SERIAL PRIMARY KEY,
+	            name VARCHAR(255) NOT NULL,
+	            password VARCHAR(255) NOT NULL,
+	            balance DECIMAL(10,2) NOT NULL,
+	            age VARCHAR(50),
+	            phonenumber INTEGER,
+	            isActive BOOLEAN DEFAULT true,
+	            gender VARCHAR(20),
+	            description TEXT
+	        )
+	        """;
+
+	    try (Connection conn = DBHelper.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(createTableSQL)) {
+
+	        ps.executeUpdate();
+	        return true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+	
 	
 	
 	
