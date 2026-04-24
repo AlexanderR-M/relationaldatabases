@@ -1,125 +1,118 @@
 package relationaldatabases;
 
-
-
 import java.sql.Connection;
-
 import java.sql.DriverManager;
-
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
-
 import java.sql.SQLException;
-
-
 
 public class DBConnectionTest {
 
-
-
-    private final static String postgresqlURL = "jdbc:postgresql://localhost:5432/postgres";
-
-    // "jdbc:postgresql://192.168.1.170.5432/sample?ssl=true";
-
-    private static String username = "postgres";
-
-    private static String password = "Admin";
-
-
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USERNAME = "postgres";
+    private static final String PASSWORD = "Admin";
 
     public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+            System.out.println("Connection established: " + conn);
 
-        try {
+            // Si quieres crear una DB nueva, hazlo aparte y con un nombre concreto.
+            // createDatabase("mi_basedatos");
 
-            Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
-            System.out.println("the address of the connection object is" + conn);
+            dropTable(conn);
+            createTable(conn);
 
-            createDatabase(conn);
-            
-            String dropTableSQL = "drop table if exists users";
-
-            PreparedStatement ps = conn.prepareStatement(dropTableSQL);
-
-            ps.executeUpdate();
-
-            ps.close();
-
-            // table creation sql
-
-            String createTableSQL = "create table if not exists users(" + "id integer not null,"
-
-                    + "usenname VARCHAR(255), " + "psw VARCHAR(255)," + "isVIP boolean," + "balance numeric,"
-
-                    + "PRIMARY KEY (id)" + ")";
-
-            PreparedStatement ps1 = conn.prepareStatement(createTableSQL);
-
-            ps1.executeUpdate();
-
-            ps1.close();
-
-            // insert sal
-
-            String insertSQL = "insert into users(id,usenname,psw, isVIP, balance) values ('19','Pablo',1243,true,224.5),('20','Alex','121',false,234.9)";
-            PreparedStatement ps11 = conn.prepareStatement(insertSQL);
-            System.out.println(ps11.executeUpdate());
-            ps11.close();
-            // delete sal
+            insertUsers(conn);
 
             selectByName(conn, "Pablo");
-            deleteByName( conn, "Jorge" );
-
+            deleteByName(conn, "Jorge");
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
 
+    private static void dropTable(Connection conn) throws SQLException {
+        String sql = "DROP TABLE IF EXISTS users";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
+    }
+
+    private static void createTable(Connection conn) throws SQLException {
+        String sql = """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER NOT NULL,
+                username VARCHAR(255),
+                psw VARCHAR(255),
+                isVIP BOOLEAN,
+                balance NUMERIC,
+                PRIMARY KEY (id)
+            )
+            """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
+    }
+
+    private static void insertUsers(Connection conn) throws SQLException {
+        String sql = "INSERT INTO users (id, username, psw, isVIP, balance) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, 19);
+            ps.setString(2, "Pablo");
+            ps.setString(3, "1243");
+            ps.setBoolean(4, true);
+            ps.setBigDecimal(5, new java.math.BigDecimal("224.5"));
+            ps.executeUpdate();
         }
 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, 20);
+            ps.setString(2, "Alex");
+            ps.setString(3, "121");
+            ps.setBoolean(4, false);
+            ps.setBigDecimal(5, new java.math.BigDecimal("234.9"));
+            ps.executeUpdate();
+        }
     }
 
+    private static void selectByName(Connection conn, String name) throws SQLException {
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
 
-
-    private static void selectByName(Connection conn, String name ) throws SQLException {
-
-        // TODO Auto-generated method stub
-        String selectSQL = "select * from users where usenname =" + name;
-        PreparedStatement ps3 = conn.prepareStatement(selectSQL);
-        System.out.println();
-        ResultSet rs = ps3.executeQuery();
-
-
-
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println(
+                        rs.getInt("id") + " | " +
+                        rs.getString("username") + " | " +
+                        rs.getString("psw") + " | " +
+                        rs.getBoolean("isVIP") + " | " +
+                        rs.getBigDecimal("balance")
+                    );
+                }
+            }
+        }
     }
-
 
     private static void deleteByName(Connection conn, String name) throws SQLException {
-
-        // TODO Auto-generated method stub
-        String deleteSQL = "DELETE FROM users WHERE usenname = "+ name;
-        //select psw, isVIP from users where username = 'Manolo' ;
-        PreparedStatement ps2 = conn.prepareStatement(deleteSQL);
-        System.out.println(ps2.executeUpdate());
-        ps2.close();
-
-    }
-
-
-
-    private static void createDatabase(Connection conn) {
-        // TODO Auto-generated method stub
-        try {
-            String dbCreationSQL = "CREATE DATABASE  ";
-            PreparedStatement ps = conn.prepareStatement(dbCreationSQL);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            // TODO: handle exception
-
+        String sql = "DELETE FROM users WHERE username = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            System.out.println("Deleted rows: " + ps.executeUpdate());
         }
-
     }
 
+    /*
+    private static void createDatabase(String dbName) {
+        String sql = "CREATE DATABASE " + dbName;
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    */
 }

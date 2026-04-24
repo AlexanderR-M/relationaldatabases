@@ -68,7 +68,19 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public boolean delete(long id) {
-		// TODO Auto-generated method stub
+		try {
+			Connection conn = new DBHelper().getConnection();
+			PreparedStatement ps = conn.prepareStatement("DELETE FROM users WHERE id = ?");
+			
+			ps.setLong(1, id);
+			ps.executeUpdate();
+			
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return false;
 	}
 
@@ -119,7 +131,8 @@ public class UserDaoImpl implements UserDao{
 		}
 		return false;
 	}
-
+	
+	
 	
 	
 
